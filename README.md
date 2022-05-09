@@ -39,7 +39,7 @@ docker container ls -a
 Search for the image of your container and copy it's ID
 
 # Getting Data from the container
-After that we need to retrieve data from the container volume
+After that, we need to retrieve data from the container volume
 To do that
 ```shell
 sudo docker cp <your-container-id>:/taxfix-challenge.db /taxfix-challenge.db
