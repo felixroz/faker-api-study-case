@@ -1,7 +1,23 @@
 # Running Locally with Python
 - Clone this repository
-- Run the file 'fake_api_workflow.py'
-
+- Open the directory where you cloned
+- Open your terminal (ctrl + l / cmd / code .)
+- run the following commands
+```shell
+python -m venv .venv
+```
+if using linux
+```shell
+source venv/bin/activate
+```
+if using windows
+```shell
+.venv/Scripts/Activate
+```
+- Install the requirements
+```shell
+pip install -r requirements.txt
+```
 # Quick explanation
 All operations are stored in the 'faker' directory
 - ingestion
@@ -9,7 +25,7 @@ All operations are stored in the 'faker' directory
 - data request
 
 The file 'fake_api_workflow.py' is our main application that connects
-all these operations. To see more details about the parameters please see the documentation in the file.
+all these operations. To see more details about how it works and the parameters please see the file's documentation.
 
 # Essential Parameters
 You might want to change the number of rows that you want to request from the faker-api.
