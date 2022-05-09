@@ -9,11 +9,11 @@ All operations are stored in the 'faker' directory
 - data request
 
 The file 'fake_api_workflow.py' is our main application that connects
-all these operations.
+all these operations. To see more details about the parameters please see the documentation in the file.
 
 # Essential Parameters
 You might want to change the number of rows that you want to request from the faker-api.
-To do this, all you have to do is change the value of the variable 'desired_number_of_rows'
+To do this, all you have to do is change the value of the variable 'desired_number_of_rows' inside the file 'fake_api_workflow.py'. The default value is 10000
 
 # How to run this application using Docker
 Make sure you have installed:
