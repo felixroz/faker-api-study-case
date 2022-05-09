@@ -49,7 +49,9 @@ def convert_age_to_age_groups(   df: pd.DataFrame()
     Args:
         df (pd.DataFrame): pandas dataframe that will be transformed
         column (str): name of the age column
-
+        keep_age_column (bool): Set this parameter to True if you want to keep the column
+                                    used in this transformation
+                                    
     Returns:
         df(pd.DataFrame): Dataframe with the "age_group" column
     """

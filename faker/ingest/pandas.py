@@ -21,7 +21,7 @@ def write_df_to_database(   df: pd.DataFrame
     # Create SQLAlchemy engine to write your dataframe into the database
     engine = create_engine(engine_str)
     # Write your data to the desired database
-    response = df.to_sql(table_str, con=engine, if_exists=if_exists)
+    response = df.to_sql(table_str, con=engine, if_exists=if_exists, index=False)
 
     return(print(f"Number of rows inserted: {response}"))
 
