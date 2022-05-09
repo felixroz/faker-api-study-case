@@ -22,14 +22,14 @@ Make sure you have installed:
 # Build the image using the dockerfile
 Open your terminal in the directory of this project
 ```shell
-docker build -t faker-challenge:v1 .
+docker build -t tax .
 ```
 
 # Create a container
 Now you need to create/run the container with the image
 that we just built
 ```shell
-docker run faker-challenge
+docker run tax
 ```
 You can also pass the flag '-it' to follow the process of the application
 
