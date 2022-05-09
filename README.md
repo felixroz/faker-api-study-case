@@ -18,6 +18,11 @@ if using windows
 ```shell
 pip install -r requirements.txt
 ```
+- Run the file
+```shell
+python fake_api_workflow.py
+```
+This run will append 10000 rows to 'taxfix-challlenge.db' to change the number of rows to append or to replace the table. Please see the documentation in 'fake_api_workflow.py'
 # Quick explanation
 All operations are stored in the 'faker' directory
 - ingestion
