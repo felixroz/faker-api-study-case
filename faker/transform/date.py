@@ -27,7 +27,7 @@ def convert_birthday_to_age(   df: pd.DataFrame()
     df['float_age'] = (df.loadtime - df.datetime_birthday)/np.timedelta64(1,'Y')
 
     # Create the desired column 'age' by applying the function floor
-    df['age'] = df['float_age'].apply(lambda row: math.floor(row))
+    df['age'] = df['float_age'].apply(lambda row: math.floor(row)).astype(int)
 
     # Drop the columns created just for the calculations
     transformed_df = df.drop(columns = ['datetime_birthday','float_age'])
@@ -59,11 +59,15 @@ def convert_age_to_age_groups(   df: pd.DataFrame()
     # Gets the maximum value of the column
     max_age = df[column].max()
 
-    # 
+    # Here I had to add + 11, (1) to include the max number in the interval
+    # (10) to create one more category from (max range) to (max range + 9)
+    # If max_age = 60, for example, we will have a category 60-69
     bins = [i for i in range(0, max_age+11, 10)]
     
+    # Dividing labels using bins
     labels = [f'{i} - {i+9}' for i in bins[:-1]]
 
+    # Using pd.cut to determine the categories using the 'age' column
     df['age_groups'] = pd.cut(  df[column]
                                 , bins = bins
                                 , labels = labels
