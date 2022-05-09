@@ -29,9 +29,8 @@ docker build -t tax .
 Now you need to create/run the container with the image
 that we just built
 ```shell
-docker run tax
+docker run -it --name taxfix-challenge tax
 ```
-You can also pass the flag '-it' to follow the process of the application
 
 # Get the ID of your container
 ```shell
