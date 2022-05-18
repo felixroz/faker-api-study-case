@@ -1,4 +1,4 @@
-from faker.request.pandas import request_data_as_df
+from faker.extract.request import request_data_as_df
 import pandas as pd
 from pandas.testing import assert_frame_equal
 import unittest
