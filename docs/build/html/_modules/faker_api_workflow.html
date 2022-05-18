@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>faker_api_workflow &mdash; TRANSACTION_EXPRESS 1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> TRANSACTION_EXPRESS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">TRANSACTION_EXPRESS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>faker_api_workflow</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for faker_api_workflow</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">faker.load.ingestion</span> <span class="kn">import</span> <span class="n">write_df_to_database</span>
+<span class="kn">from</span> <span class="nn">faker.extract.request</span> <span class="kn">import</span> <span class="n">request_data_as_df</span>
+<span class="kn">from</span> <span class="nn">faker.transform.datamask</span> <span class="kn">import</span> <span class="n">MaskColumn</span>
+<span class="kn">from</span> <span class="nn">faker.transform.date</span> <span class="kn">import</span> <span class="n">convert_age_to_age_groups</span><span class="p">,</span> <span class="n">convert_birthday_to_age</span>
+<span class="kn">from</span> <span class="nn">faker.transform.rename</span> <span class="kn">import</span> <span class="n">rename_columns</span>
+
+
+<div class="viewcode-block" id="faker_api_workflow"><a class="viewcode-back" href="../index.html#faker_api_workflow.faker_api_workflow">[docs]</a><span class="k">def</span> <span class="nf">faker_api_workflow</span><span class="p">(</span> <span class="n">desired_number_of_rows</span><span class="p">:</span> <span class="nb">int</span>
+                        <span class="p">,</span> <span class="n">columns_to_mask_by_len</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;firstname&#39;</span><span class="p">,</span><span class="s1">&#39;lastname&#39;</span><span class="p">,</span><span class="s1">&#39;address.buildingNumber&#39;</span><span class="p">]</span>
+                        <span class="p">,</span> <span class="n">unwanted_columns</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;address.id&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                        <span class="p">,</span> <span class="n">if_exists</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;append&#39;</span>
+                        <span class="p">,</span> <span class="n">database_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;taxfix-challenge&#39;</span>
+                        <span class="p">,</span> <span class="n">table_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;FAKER_API&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a generic workflow to get data from the</span>
+<span class="sd">    API: https://fakerapi.it/api/v1/ and ingest into SQLite database that</span>
+<span class="sd">    will be created in your work directory.</span>
+<span class="sd">    The data will be transformed using some functions that you can find</span>
+<span class="sd">    in the package &quot;faker&quot;.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        desired_number_of_rows (int): The number of rows that you want to request</span>
+<span class="sd">        columns_to_mask_by_len (List, optional): List of columns that you want to use MaskColumn().bylen</span>
+<span class="sd">                                                Default: [&#39;firstname&#39;,&#39;lastname&#39;,&#39;address.buildingNumber&#39;]</span>
+<span class="sd">        unwanted_columns (List, optional): List containing the name of unwanted columns. Defaults to &#39;address.id&#39;.</span>
+<span class="sd">        if_exists (str, optional): Inherited from the method pd.DataFrame().to_sql()</span>
+<span class="sd">                                    for more information see: </span>
+<span class="sd">                                    https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html</span>
+<span class="sd">                                    Defaults to &#39;append&#39; </span>
+<span class="sd">        database_str (str, optional):   Name of the database that you want to access or create</span>
+<span class="sd">                                        Defaults to &#39;taxfix-challenge&#39;.</span>
+<span class="sd">        table_str (str, optional):  Name of the table that you want to create or append your data </span>
+<span class="sd">                                     Defaults to &#39;FAKER_API&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Use the function request_data_as_df to acquire data as a pandas dataframe</span>
+    <span class="n">request_df</span> <span class="o">=</span>  <span class="n">request_data_as_df</span><span class="p">(</span><span class="n">desired_number_of_rows</span> <span class="o">=</span> <span class="n">desired_number_of_rows</span><span class="p">)</span>
+
+    <span class="c1"># Remove unwanted columns in your dataframe</span>
+    <span class="n">cleaned_df</span> <span class="o">=</span> <span class="n">request_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">unwanted_columns</span><span class="p">)</span>
+
+    <span class="c1"># Transform birthday column into &#39;age&#39; column</span>
+    <span class="n">transformed_df</span> <span class="o">=</span> <span class="n">convert_birthday_to_age</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">cleaned_df</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;birthday&#39;</span><span class="p">)</span>
+    <span class="c1"># Categorizes ages into predetermined range of values</span>
+    <span class="n">transformed_df</span> <span class="o">=</span> <span class="n">convert_age_to_age_groups</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">transformed_df</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="n">keep_age_column</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="c1"># Convert the column &#39;email&#39; into a &#39;domain&#39; column by removing everything before &#39;@&#39;</span>
+    <span class="n">transformed_df</span><span class="p">[</span><span class="s1">&#39;domain&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">transformed_df</span><span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Mask columns using the class MaskColumn (to see how this works please, see docs)</span>
+    <span class="n">masked_transformed_df</span> <span class="o">=</span> <span class="n">MaskColumn</span><span class="p">(</span><span class="n">transformed_df</span><span class="p">)</span><span class="o">.</span><span class="n">by_len</span><span class="p">(</span><span class="n">list_of_columns</span> <span class="o">=</span> <span class="n">columns_to_mask_by_len</span><span class="p">)</span>
+
+    <span class="n">masked_transformed_df</span> <span class="o">=</span> <span class="n">MaskColumn</span><span class="p">(</span><span class="n">transformed_df</span><span class="p">)</span><span class="o">.</span><span class="n">before_a_character</span><span class="p">(</span><span class="n">list_of_columns</span> <span class="o">=</span> \
+                                <span class="p">[</span><span class="s1">&#39;email&#39;</span><span class="p">],</span> <span class="n">character</span> <span class="o">=</span> <span class="s1">&#39;@&#39;</span><span class="p">)</span>
+
+    <span class="n">masked_transformed_df</span> <span class="o">=</span> <span class="n">MaskColumn</span><span class="p">(</span><span class="n">transformed_df</span><span class="p">)</span><span class="o">.</span><span class="n">before_a_character</span><span class="p">(</span><span class="n">list_of_columns</span> <span class="o">=</span> \
+                                <span class="p">[</span><span class="s1">&#39;address.zipcode&#39;</span><span class="p">],</span> <span class="n">character</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+    <span class="n">masked_transformed_df</span> <span class="o">=</span> <span class="n">MaskColumn</span><span class="p">(</span><span class="n">transformed_df</span><span class="p">)</span><span class="o">.</span><span class="n">after_a_character</span><span class="p">(</span><span class="n">list_of_columns</span> <span class="o">=</span>\
+                                <span class="p">[</span><span class="s1">&#39;address.latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;address.longitude&#39;</span><span class="p">],</span> <span class="n">character</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+
+    <span class="n">masked_transformed_df</span> <span class="o">=</span> <span class="n">MaskColumn</span><span class="p">(</span><span class="n">transformed_df</span><span class="p">)</span><span class="o">.</span><span class="n">keep_first</span><span class="p">(</span><span class="n">list_of_columns</span> <span class="o">=</span>\
+                                <span class="p">[</span><span class="s1">&#39;phone&#39;</span><span class="p">],</span> <span class="n">length</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="c1"># Renaming columns name to remove unwanted characters</span>
+    <span class="n">renamed_columns_df</span> <span class="o">=</span> <span class="n">rename_columns</span><span class="p">(</span><span class="n">masked_transformed_df</span><span class="p">)</span>
+
+    <span class="c1"># Use the function to write the data acquired and transformed in the previous steps into</span>
+    <span class="c1"># the desired database/table and condition of choice (&#39;append&#39; or &#39;replace&#39;)</span>
+    <span class="n">write_df_to_database</span><span class="p">(</span>   <span class="n">df</span> <span class="o">=</span> <span class="n">renamed_columns_df</span>
+                            <span class="p">,</span> <span class="n">engine_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;sqlite:///</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">database_str</span><span class="si">}</span><span class="s1">.db&#39;</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;&#39;&#39;</span>
+                            <span class="p">,</span> <span class="n">table_str</span> <span class="o">=</span> <span class="n">table_str</span>
+                            <span class="p">,</span> <span class="n">if_exists</span> <span class="o">=</span> <span class="n">if_exists</span><span class="p">)</span></div>
+
+<span class="n">unwanted_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;address.id&quot;</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="s2">&quot;website&quot;</span><span class="p">]</span>
+
+<span class="n">faker_api_workflow</span><span class="p">(</span> <span class="n">desired_number_of_rows</span><span class="o">=</span> <span class="mi">10000</span><span class="p">,</span>
+                    <span class="n">unwanted_columns</span><span class="o">=</span><span class="n">unwanted_columns</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Marlon Rozindo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

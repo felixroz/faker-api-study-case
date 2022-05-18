@@ -36,6 +36,9 @@ all these operations. To see more details about how it works and the parameters 
 You might want to change the number of rows that you want to request from the faker-api.
 To do this, all you have to do is change the value of the variable 'desired_number_of_rows' inside the file 'fake_api_workflow.py'. The default value is 10000
 
+# Compressed Documentation
+You will find a better explanation about each class or/and function in: docs/build/index.html
+
 # How to run this application using Docker
 Make sure you have installed:
 * docker
