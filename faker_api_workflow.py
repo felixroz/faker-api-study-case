@@ -5,7 +5,7 @@ from typing import List
 import os
 
 from faker.load.ingestion import write_df_to_database
-from faker.extract.request import request_data_as_df
+from faker.extract.requestAPI import request_data_as_df
 from faker.transform.datamask import MaskColumn
 from faker.transform.date import convert_age_to_age_groups, convert_birthday_to_age
 from faker.transform.rename import rename_columns

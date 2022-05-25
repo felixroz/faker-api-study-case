@@ -10,7 +10,7 @@ Workflow
 
 Extract - Request
 -------------------------------
-.. automodule:: faker.extract.request
+.. automodule:: faker.extract.requestAPI
    :members:
    :autosummary:
 

@@ -37,7 +37,7 @@ You might want to change the number of rows that you want to request from the fa
 To do this, all you have to do is change the value of the variable 'desired_number_of_rows' inside the file 'fake_api_workflow.py'. The default value is 10000
 
 # Compressed Documentation
-You will find a better explanation about each class or/and function in: docs/build/index.html
+You will find more detailed explanation about each function or class in: docs/build/html/index.html
 
 # How to run this application using Docker
 Make sure you have installed:
