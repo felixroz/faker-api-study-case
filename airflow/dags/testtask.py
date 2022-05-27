@@ -11,7 +11,7 @@ import boto3
 from botocore.client import Config
 # [END import_module]
                
-@dag(schedule_interval = '@daily', start_date=datetime(2022,5,26), catchup = False)
+@dag(schedule_interval = '@once', start_date=datetime(2022,5,26), catchup = False)
 def taskflow():
 
     @task(task_id='extract')
