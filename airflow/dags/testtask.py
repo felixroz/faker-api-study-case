@@ -16,7 +16,9 @@ def taskflow():
 
     @task(task_id='extract')
     def extract_data_as_df() -> None:
-        requested_number_of_rows = Variable.get('requested_number_of_rows')
+        requested_number_of_rows = int(Variable.get("requested_number_of_rows"))
+        
+        print(requested_number_of_rows)
 
         df = request_data_as_df(requested_number_of_rows)
 
