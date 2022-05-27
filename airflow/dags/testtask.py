@@ -1,4 +1,6 @@
 # [START import_module]
+import email
+from dagster import Backoff
 import pandas as pd
 from airflow.models import Variable
 from datetime import datetime
@@ -11,7 +13,13 @@ import boto3
 from botocore.client import Config
 # [END import_module]
                
-@dag(schedule_interval = '@once', start_date=datetime(2022,5,26), catchup = False)
+@dag(   schedule_interval = '@once'
+        , start_date=datetime(2022,5,26)
+        , catchup = False
+        , retry_exponential_backoff = True
+        , retries = 3
+        , email_on_failure=True
+        , email = 'marlon.saura@gmail.com')
 def taskflow():
 
     @task(task_id='extract')
@@ -22,7 +30,7 @@ def taskflow():
 
         df = request_data_as_df(requested_number_of_rows)
 
-        file_name = f'''faker_csv_{datetime.now().strftime('%Y-%m-%d')}'''
+        file_name = f'''faker_csv_{datetime.now().strftime('%Y-%m-%dT%H-%M-%S')}'''
         
         s3 = boto3.resource('s3',
                     endpoint_url='http://165.227.255.79:9000/',
