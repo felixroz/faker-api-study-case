@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workflow &mdash; FakerAPI - Challenge 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> FakerAPI - Challenge
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Workflow</a></li>
+<li><a class="reference internal" href="#module-faker.extract.requestAPI">Extract - Request</a></li>
+<li><a class="reference internal" href="#transform-datamasking">Transform - Datamasking</a></li>
+<li><a class="reference internal" href="#module-faker.transform.date">Transform - Date</a></li>
+<li><a class="reference internal" href="#module-faker.transform.rename">Transform - Rename</a></li>
+<li><a class="reference internal" href="#module-faker.load.ingestion">Load - Ingestion</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">FakerAPI - Challenge</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>Workflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-faker_api_workflow">
+<span id="workflow"></span><h1>Workflow<a class="headerlink" href="#module-faker_api_workflow" title="Permalink to this headline"></a></h1>
+<p><strong>Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker_api_workflow.faker_api_workflow" title="faker_api_workflow.faker_api_workflow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">faker_api_workflow</span></code></a>(desired_number_of_rows[, ...])</p></td>
+<td><p>This is a generic workflow to get data from the API: <a class="reference external" href="https://fakerapi.it/api/v1/">https://fakerapi.it/api/v1/</a> and ingest into SQLite database that will be created in your work directory.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="faker_api_workflow.faker_api_workflow">
+<span class="sig-prename descclassname"><span class="pre">faker_api_workflow.</span></span><span class="sig-name descname"><span class="pre">faker_api_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_number_of_rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_to_mask_by_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['firstname',</span> <span class="pre">'lastname',</span> <span class="pre">'address.buildingNumber']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwanted_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">['address.id',</span> <span class="pre">'id']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_exists</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'append'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'taxfix-challenge'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'FAKER_API'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker_api_workflow.html#faker_api_workflow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker_api_workflow.faker_api_workflow" title="Permalink to this definition"></a></dt>
+<dd><p>This is a generic workflow to get data from the
+API: <a class="reference external" href="https://fakerapi.it/api/v1/">https://fakerapi.it/api/v1/</a> and ingest into SQLite database that
+will be created in your work directory.
+The data will be transformed using some functions that you can find
+in the package “faker”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>desired_number_of_rows</strong> (<em>int</em>) – The number of rows that you want to request</p></li>
+<li><p><strong>columns_to_mask_by_len</strong> (<em>List</em><em>, </em><em>optional</em>) – List of columns that you want to use MaskColumn().bylen
+Default: [‘firstname’,’lastname’,’address.buildingNumber’]</p></li>
+<li><p><strong>unwanted_columns</strong> (<em>List</em><em>, </em><em>optional</em>) – List containing the name of unwanted columns. Defaults to ‘address.id’.</p></li>
+<li><p><strong>if_exists</strong> (<em>str</em><em>, </em><em>optional</em>) – Inherited from the method pd.DataFrame().to_sql()
+for more information see:
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html">https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html</a>
+Defaults to ‘append’</p></li>
+<li><p><strong>database_str</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the database that you want to access or create
+Defaults to ‘taxfix-challenge’.</p></li>
+<li><p><strong>table_str</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the table that you want to create or append your data
+Defaults to ‘FAKER_API’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-faker.extract.requestAPI">
+<span id="extract-request"></span><h1>Extract - Request<a class="headerlink" href="#module-faker.extract.requestAPI" title="Permalink to this headline"></a></h1>
+<p><strong>Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.extract.requestAPI.request_data_as_df" title="faker.extract.requestAPI.request_data_as_df"><code class="xref py py-obj docutils literal notranslate"><span class="pre">request_data_as_df</span></code></a>(desired_number_of_rows)</p></td>
+<td><p>This function is in charge of getting data from the API: <a class="reference external" href="https://fakerapi.it/api/v1/">https://fakerapi.it/api/v1/</a> and return all the information as a raw pandas DataFrame.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="faker.extract.requestAPI.request_data_as_df">
+<span class="sig-prename descclassname"><span class="pre">faker.extract.requestAPI.</span></span><span class="sig-name descname"><span class="pre">request_data_as_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/extract/requestAPI.html#request_data_as_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.extract.requestAPI.request_data_as_df" title="Permalink to this definition"></a></dt>
+<dd><p>This function is in charge of getting data from the
+API: <a class="reference external" href="https://fakerapi.it/api/v1/">https://fakerapi.it/api/v1/</a>
+and return all the information as a raw pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>desired_number_of_rows</strong> (<em>int</em>) – The number of rows that you want to request</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Information requested from API as a pandas DataFrame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>request_df (pd.DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="transform-datamasking">
+<h1>Transform - Datamasking<a class="headerlink" href="#transform-datamasking" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="faker.transform.datamask.MaskColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">faker.transform.datamask.</span></span><span class="sig-name descname"><span class="pre">MaskColumn</span></span><a class="reference internal" href="_modules/faker/transform/datamask.html#MaskColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.datamask.MaskColumn" title="Permalink to this definition"></a></dt>
+<dd><p>This class is a collection of operations for masking pandas
+Dataframes accordingly to the desired characteristics.
+Every method applies transformations at the record level</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – Pandas DataFrame to be transformed</p>
+</dd>
+</dl>
+<p><strong>Methods:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.transform.datamask.MaskColumn.after_a_character" title="faker.transform.datamask.MaskColumn.after_a_character"><code class="xref py py-obj docutils literal notranslate"><span class="pre">after_a_character</span></code></a>(list_of_columns, character)</p></td>
+<td><p>This method mask the row only after a certain parsed character. For example, the row with the value <a class="reference external" href="mailto:'foo&#37;&#52;&#48;email&#46;com">'foo<span>&#64;</span>email<span>&#46;</span>com</a>'     will be transformed into <a class="reference external" href="mailto:'foo&#37;&#52;&#48;*********">'foo<span>&#64;</span>*********</a>'(9*).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#faker.transform.datamask.MaskColumn.before_a_character" title="faker.transform.datamask.MaskColumn.before_a_character"><code class="xref py py-obj docutils literal notranslate"><span class="pre">before_a_character</span></code></a>(list_of_columns, character)</p></td>
+<td><p>This method mask the row only after a certain parsed character. For example, the row with the value <a class="reference external" href="mailto:'foo&#37;&#52;&#48;email&#46;com">'foo<span>&#64;</span>email<span>&#46;</span>com</a>'     will be transformed into '<a href="#id1"><span class="problematic" id="id2">**</span></a><em>&#64;email.com'(3</em>) :param list_of_columns: List of the columns to apply the function :type list_of_columns: List :param character: String with the character that will be used as reference                   to apply the method :type character: str.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.transform.datamask.MaskColumn.by_len" title="faker.transform.datamask.MaskColumn.by_len"><code class="xref py py-obj docutils literal notranslate"><span class="pre">by_len</span></code></a>(list_of_columns)</p></td>
+<td><p>This method mask the row accordingly with its length. For example, the record with the string 'foo' will return '<a href="#id3"><span class="problematic" id="id4">**</span></a><a href="#id5"><span class="problematic" id="id6">*</span></a>'.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#faker.transform.datamask.MaskColumn.keep_first" title="faker.transform.datamask.MaskColumn.keep_first"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keep_first</span></code></a>(list_of_columns[, length])</p></td>
+<td><p>This method masks the row by keeping a certain number of characters</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.transform.datamask.MaskColumn.keep_last" title="faker.transform.datamask.MaskColumn.keep_last"><code class="xref py py-obj docutils literal notranslate"><span class="pre">keep_last</span></code></a>(list_of_columns[, length])</p></td>
+<td><p>This method masks the row by keeping a certain number of characters</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="faker.transform.datamask.MaskColumn.after_a_character">
+<span class="sig-name descname"><span class="pre">after_a_character</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">character</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/datamask.html#MaskColumn.after_a_character"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.datamask.MaskColumn.after_a_character" title="Permalink to this definition"></a></dt>
+<dd><p>This method mask the row only after a certain parsed character.
+For example, the row with the value <a class="reference external" href="mailto:'foo&#37;&#52;&#48;email&#46;com">‘foo<span>&#64;</span>email<span>&#46;</span>com</a>’</p>
+<blockquote>
+<div><p>will be transformed into <a class="reference external" href="mailto:'foo&#37;&#52;&#48;*********">‘foo<span>&#64;</span>*********</a>’(9*)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_of_columns</strong> (<em>List</em>) – List of the columns to apply the function</p></li>
+<li><p><strong>character</strong> (<em>str</em>) – String with the character that will be used as reference
+to apply the method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas DataFrame with the transformed columns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="faker.transform.datamask.MaskColumn.before_a_character">
+<span class="sig-name descname"><span class="pre">before_a_character</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">character</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/datamask.html#MaskColumn.before_a_character"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.datamask.MaskColumn.before_a_character" title="Permalink to this definition"></a></dt>
+<dd><p>This method mask the row only after a certain parsed character.
+For example, the row with the value <a class="reference external" href="mailto:'foo&#37;&#52;&#48;email&#46;com">‘foo<span>&#64;</span>email<span>&#46;</span>com</a>’</p>
+<blockquote>
+<div><p>will be transformed into ‘<a href="#id7"><span class="problematic" id="id8">**</span></a><em>&#64;email.com’(3</em>)</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_of_columns</strong> (<em>List</em>) – List of the columns to apply the function</p></li>
+<li><p><strong>character</strong> (<em>str</em>) – String with the character that will be used as reference
+to apply the method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas DataFrame with the transformed columns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="faker.transform.datamask.MaskColumn.by_len">
+<span class="sig-name descname"><span class="pre">by_len</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/datamask.html#MaskColumn.by_len"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.datamask.MaskColumn.by_len" title="Permalink to this definition"></a></dt>
+<dd><p>This method mask the row accordingly with its length.
+For example, the record with the string ‘foo’ will return ‘<a href="#id9"><span class="problematic" id="id10">**</span></a><a href="#id11"><span class="problematic" id="id12">*</span></a>’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>list_of_columns</strong> (<em>List</em>) – List of the columns to apply the function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas DataFrame with the transformed columns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="faker.transform.datamask.MaskColumn.keep_first">
+<span class="sig-name descname"><span class="pre">keep_first</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/datamask.html#MaskColumn.keep_first"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.datamask.MaskColumn.keep_first" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This method masks the row by keeping a certain number of characters</dt><dd><p>at the beginning of the string and replacing the others with ‘*’.</p>
+</dd>
+</dl>
+<p>For example, the word ‘taxfix’ will be transformed into ‘taxf**’(4*)
+But the number of characters can be changed accordingly to the user’s choice.
+For example, if the user specifies length=2 then ‘taxfix’ will be</p>
+<blockquote>
+<div><p>transformed into ‘ta****’ insted of ‘taxf**’</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_of_columns</strong> (<em>List</em>) – List of the columns to apply the function</p></li>
+<li><p><strong>length</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of characters that you want to keep
+Default to 4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas DataFrame with the transformed columns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="faker.transform.datamask.MaskColumn.keep_last">
+<span class="sig-name descname"><span class="pre">keep_last</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/datamask.html#MaskColumn.keep_last"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.datamask.MaskColumn.keep_last" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This method masks the row by keeping a certain number of characters</dt><dd><p>at the end of the string and replacing the others with ‘*’.</p>
+</dd>
+</dl>
+<p>For example, the word ‘taxfix’ will be transformed into ‘<a href="#id13"><span class="problematic" id="id14">**</span></a>xfix’(4*)
+But the number of characters can be changed accordingly to the user’s choice.
+For example, if the user specifies length=2 then ‘taxfix’ will be</p>
+<blockquote>
+<div><p>transformed into ‘<a href="#id15"><span class="problematic" id="id16">**</span></a><a href="#id17"><span class="problematic" id="id18">**</span></a>ix’ insted of ‘<a href="#id19"><span class="problematic" id="id20">**</span></a>xfix’</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_of_columns</strong> (<em>List</em>) – List of the columns to apply the function</p></li>
+<li><p><strong>length</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of characters that you want to keep
+Default to 4.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas DataFrame with the transformed columns</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-faker.transform.date">
+<span id="transform-date"></span><h1>Transform - Date<a class="headerlink" href="#module-faker.transform.date" title="Permalink to this headline"></a></h1>
+<p><strong>Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.transform.date.convert_age_to_age_groups" title="faker.transform.date.convert_age_to_age_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_age_to_age_groups</span></code></a>(df, column[, ...])</p></td>
+<td><p>This function is in charge of dividing an age column into categories of '10 years age group' (i.e someone with 31 years old must be categorized in [30-40] age group category).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#faker.transform.date.convert_birthday_to_age" title="faker.transform.date.convert_birthday_to_age"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_birthday_to_age</span></code></a>(df, column[, ...])</p></td>
+<td><p>This function is in charge of converting a birthday column into a column with the age :param df: pandas dataframe that will be transformed :type df: pd.DataFrame :param column: name of the birthday column :type column: str</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="faker.transform.date.convert_age_to_age_groups">
+<span class="sig-prename descclassname"><span class="pre">faker.transform.date.</span></span><span class="sig-name descname"><span class="pre">convert_age_to_age_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/date.html#convert_age_to_age_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.date.convert_age_to_age_groups" title="Permalink to this definition"></a></dt>
+<dd><p>This function is in charge of dividing an age column into categories
+of ‘10 years age group’ (i.e someone with 31 years old must be categorized in [30-40] age group category).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – pandas dataframe that will be transformed</p></li>
+<li><p><strong>column</strong> (<em>str</em>) – name of the age column</p></li>
+<li><p><strong>keep_age_column</strong> (<em>bool</em>) – Set this parameter to True if you want to keep the column
+used in this transformation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dataframe with the “age_group” column</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df(pd.DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="faker.transform.date.convert_birthday_to_age">
+<span class="sig-prename descclassname"><span class="pre">faker.transform.date.</span></span><span class="sig-name descname"><span class="pre">convert_birthday_to_age</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/date.html#convert_birthday_to_age"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.date.convert_birthday_to_age" title="Permalink to this definition"></a></dt>
+<dd><p>This function is in charge of converting a birthday column into a
+column with the age
+:param df: pandas dataframe that will be transformed
+:type df: pd.DataFrame
+:param column: name of the birthday column
+:type column: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dataframe with the “age” column</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>df(pd.DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-faker.transform.rename">
+<span id="transform-rename"></span><h1>Transform - Rename<a class="headerlink" href="#module-faker.transform.rename" title="Permalink to this headline"></a></h1>
+<p><strong>Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.transform.rename.rename_columns" title="faker.transform.rename.rename_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rename_columns</span></code></a>(df)</p></td>
+<td><p>Fix dataframe columns name so it can't cause a conflict into the database</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="faker.transform.rename.rename_columns">
+<span class="sig-prename descclassname"><span class="pre">faker.transform.rename.</span></span><span class="sig-name descname"><span class="pre">rename_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/faker/transform/rename.html#rename_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.transform.rename.rename_columns" title="Permalink to this definition"></a></dt>
+<dd><p>Fix dataframe columns name so it can’t cause a conflict into
+the database</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pd.DataFrame</em>) – DataFrame to be fixed with the function</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>DataFrame with fixed columns name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>df(pd.DataFrame)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-faker.load.ingestion">
+<span id="load-ingestion"></span><h1>Load - Ingestion<a class="headerlink" href="#module-faker.load.ingestion" title="Permalink to this headline"></a></h1>
+<p><strong>Functions:</strong></p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#faker.load.ingestion.write_df_to_database" title="faker.load.ingestion.write_df_to_database"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_df_to_database</span></code></a>(df, engine_str, table_str)</p></td>
+<td><p>Write your pandas DataFrame into a database using supported SQLAlchemy connectors.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="faker.load.ingestion.write_df_to_database">
+<span class="sig-prename descclassname"><span class="pre">faker.load.ingestion.</span></span><span class="sig-name descname"><span class="pre">write_df_to_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_str</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_exists</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'append'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/faker/load/ingestion.html#write_df_to_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#faker.load.ingestion.write_df_to_database" title="Permalink to this definition"></a></dt>
+<dd><p>Write your pandas DataFrame into a database using supported
+SQLAlchemy connectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – Pandas DataFrame that you want to insert into your database</p></li>
+<li><p><strong>engine_str</strong> (<em>str</em>) – String containing SQLAlchemy format connection</p></li>
+<li><p><strong>table_str</strong> (<em>str</em>) – Name of the table that you want to append data or create</p></li>
+<li><p><strong>if_exists</strong> (<em>str</em><em>, </em><em>optional</em>) – Inherited from the method pd.DataFrame().to_sql()
+for more information see:
+<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html">https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html</a>
+Defaults to ‘append’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Marlon Rozindo.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

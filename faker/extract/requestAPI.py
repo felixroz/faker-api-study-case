@@ -1,6 +1,8 @@
 import math
 import pandas as pd
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
 
 def request_data_as_df(desired_number_of_rows: int) -> pd.DataFrame():
     """
@@ -40,15 +42,31 @@ def request_data_as_df(desired_number_of_rows: int) -> pd.DataFrame():
         For this reason you will have to wait: {total_number_of_batches} batches
         To get the desired number of rows
             """)
+    
+    # All variables above until the next comment are going to be used 
+    # for a backoff strategy in case of a request failure
+    retry_strategy = Retry(
+                            total = 3,
+                            status_forcelist = [429, 500, 502, 503, 504],
+                            allowed_methods = ["HEAD", "GET", "OPTIONS"],
+                            backoff_factor = 5
+                        )
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    http.mount("http://", adapter)
 
     
     # Starts a loop to keep getting data from API requests until
     # we have the desired number of rows in the dataframe
     while requested_number_of_rows < desired_number_of_rows:
         try:
-            request_response = requests.get(f"https://fakerapi.it/api/v1/persons?_quantity={number_of_rows_to_request}")
-        except requests.exceptions.RequestException as e:
-            raise SystemExit(e)
+            request_response = http.get(f"https://fakerapi.it/api/v1/persons?_quantity={number_of_rows_to_request}")
+        except:
+            raise Exception(f'Request Timed Out after {retry_strategy.get_backoff_time()}')
+
+        finally:
+            http.close()
 
         # Tranform the request response into a json object
         request_json = request_response.json()
