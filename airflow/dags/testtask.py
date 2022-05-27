@@ -1,6 +1,4 @@
 # [START import_module]
-import email
-from dagster import Backoff
 import pandas as pd
 from airflow.models import Variable
 from datetime import datetime
