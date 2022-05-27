@@ -1,8 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: airflow
+  namespace: orchestrator
   name: airflow-variables
 data:
-  AIRFLOW_VAR_MY_S3_BUCKET: "staging"
+  AIRFLOW_VAR_HOST_URI: 'http://165.227.255.79:9000/'
+  AIRFLOW_VAR_ACCESS_KEY: 'myaccesskey'
+  AIRFLOW_VAR_SECRET_KEY: 'mysecretkey'
+  AIRFLOW_VAR_STAGING: 'staging'
   
