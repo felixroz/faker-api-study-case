@@ -29,7 +29,7 @@ def taskflow():
 
         df = request_data_as_df(requested_number_of_rows)
 
-        file_name = f'''faker_csv_{datetime.now().strftime('%Y-%m-%dT%H-%M-%S')}'''
+        file_name = f'''faker_csv_{datetime.now().strftime('%Y-%m-%dT%H-%M-%Sms%f')}'''
         
         s3 = boto3.resource('s3',
                     endpoint_url='http://165.227.255.79:9000/',
