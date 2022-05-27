@@ -14,13 +14,14 @@ from botocore.client import Config
 @dag(   schedule_interval = '@once'
         , start_date=datetime(2022,5,26)
         , catchup = False
-        , retry_exponential_backoff = True
-        , retries = 3
-        , email_on_failure=True
-        , email = 'marlon.saura@gmail.com')
+    )
 def taskflow():
 
-    @task(task_id='extract')
+    @task(  task_id='extract'
+            , retry_exponential_backoff = True
+            , retries = 3
+            , email_on_failure=True
+            , email = 'marlon.saura@gmail.com')
     def extract_data_as_df() -> None:
         requested_number_of_rows = int(Variable.get("requested_number_of_rows"))
         
