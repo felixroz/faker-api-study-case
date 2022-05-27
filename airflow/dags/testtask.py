@@ -1,6 +1,6 @@
 # [START import_module]
-from fileinput import filename
 import pandas as pd
+from airflow.models import Variable
 from datetime import datetime
 from airflow import DAG
 from airflow.decorators import task, dag
@@ -16,7 +16,9 @@ def taskflow():
 
     @task(task_id='extract')
     def extract_data_as_df() -> None:
-        df = request_data_as_df('{{var.json.requested_number_of_rows}}')
+        requested_number_of_rows = Variable.get('requested_number_of_rows')
+
+        df = request_data_as_df(requested_number_of_rows)
 
         file_name = f'''faker_csv_{datetime.now().strftime('%Y-%m-%d')}'''
         
@@ -33,7 +35,7 @@ def taskflow():
         s3.Object("staging", file_name).put(Body=buffer.getvalue())
                 
 
-        return 'Successfully extracted {{var.json.requested_number_of_rows}}'
+        return f'Successfully extracted {requested_number_of_rows}'
 
     extract_data_as_df()
 
